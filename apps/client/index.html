@@ -31,18 +31,18 @@
 
       <main class="app-main">
         <section class="stage" aria-label="Robbie">
-          <div class="robbie" id="robbie" data-state="idle">
+          <div class="robbie-shell" id="robbie" data-state="idle">
             <button type="button" class="robbie__top-button" id="robbie-button" aria-label="Botón principal de Robbie">
               <span class="robbie__top-button-ring" aria-hidden="true"></span>
             </button>
             <div class="robbie__casing">
               <div class="robbie__screen">
-                <canvas
-                  class="robbie__eyes-canvas"
-                  id="robbie-eyes"
+                <div
+                  class="robbie-visual"
+                  id="robbie-eyes-root"
                   role="img"
                   aria-label="Ojos de Robbie"
-                ></canvas>
+                ></div>
               </div>
               <div class="robbie__grille" aria-hidden="true"></div>
             </div>

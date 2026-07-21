@@ -1,9 +1,9 @@
 /* ============================================================
-   robbie.css — la carcasa de Robbie: botón superior, pantalla
-   con canvas de ojos y rejilla del parlante. Sin imágenes.
+   robbie.css — carcasa de Robbie: botón superior, pantalla
+   DOM de ojos y rejilla del parlante. Sin imágenes.
    ============================================================ */
 
-.robbie {
+.robbie-shell {
   /* Color del aro de luz del botón: cambia con data-state (ver abajo) */
   --ring-color: var(--color-accent);
 
@@ -77,12 +77,14 @@
     0 1px 0 rgba(255, 255, 255, 0.35); /* filo claro: pantalla empotrada */
 }
 
-.robbie__eyes-canvas {
+/* El módulo visual original se centra dentro de la pantalla, sin alterar su API. */
+#robbie-eyes-root {
   position: absolute;
   inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 /* ---------- Rejilla del parlante: perforada en la carcasa ---------- */
@@ -105,18 +107,18 @@
 
 /* ---------- Variación visual por estado: color del aro de luz ---------- */
 
-.robbie[data-state='idle'] { --ring-color: var(--color-accent); }
-.robbie[data-state='listening'] { --ring-color: var(--color-success); }
-.robbie[data-state='thinking'] { --ring-color: var(--color-warning); }
-.robbie[data-state='speaking'] { --ring-color: var(--color-violet); }
-.robbie[data-state='focus'] { --ring-color: var(--color-teal); }
-.robbie[data-state='paused'] { --ring-color: var(--color-text-muted); }
-.robbie[data-state='success'] { --ring-color: var(--color-success); }
-.robbie[data-state='alert'] { --ring-color: var(--color-accent-orange); }
-.robbie[data-state='error'] { --ring-color: var(--color-danger); }
-.robbie[data-state='offline'] { --ring-color: var(--color-border); }
+.robbie-shell[data-state='idle'] { --ring-color: var(--color-accent); }
+.robbie-shell[data-state='listening'] { --ring-color: var(--color-success); }
+.robbie-shell[data-state='thinking'] { --ring-color: var(--color-warning); }
+.robbie-shell[data-state='speaking'] { --ring-color: var(--color-violet); }
+.robbie-shell[data-state='focus'] { --ring-color: var(--color-teal); }
+.robbie-shell[data-state='paused'] { --ring-color: var(--color-text-muted); }
+.robbie-shell[data-state='success'] { --ring-color: var(--color-success); }
+.robbie-shell[data-state='alert'] { --ring-color: var(--color-accent-orange); }
+.robbie-shell[data-state='error'] { --ring-color: var(--color-danger); }
+.robbie-shell[data-state='offline'] { --ring-color: var(--color-border); }
 
-.robbie[data-state='offline'] .robbie__top-button-ring,
-.robbie[data-state='paused'] .robbie__top-button-ring {
+.robbie-shell[data-state='offline'] .robbie__top-button-ring,
+.robbie-shell[data-state='paused'] .robbie__top-button-ring {
   opacity: 0.25;
 }

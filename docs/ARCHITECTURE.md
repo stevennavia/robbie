@@ -62,9 +62,11 @@ Interfaz web con Vite + TypeScript puro (sin React ni frameworks visuales), serv
 
 - `connection.ts`: clase `RobbieConnection`. Conecta con `ws://localhost:3001/ws`, valida cada mensaje con los esquemas compartidos y reconecta automáticamente con **espera progresiva limitada**: 1s → 2s → 4s → 8s, con tope de 10s entre intentos.
 - `main.ts`: orquesta la aplicación: navegación entre secciones, alternancia de modo completo/compacto (persistida en `localStorage`, sobreescribible con `?mode=`), indicador de conexión y aplicación del estado de Robbie.
-- `robbie/eyes.ts`: dibuja los ojos en Canvas 2D (cápsulas verticales celestes, centradas, geometría proporcional, ajuste por `devicePixelRatio`).
-- `robbie/state-visuals.ts`: función pura `getStateVisual(state)` → `{ eyeIntensity, accent, label }`. Es la representación simple de la Fase 2; el motor de expresiones llegará en la Fase 3.
-- `robbie/robbie-view.ts`: clase `RobbieView`. Posee el canvas, la etiqueta de estado y el atributo `data-state`; redibuja con `ResizeObserver` y suaviza el brillo con un *lerp* de 180 ms (desactivado con `prefers-reduced-motion`).
+- `robbie/index.ts`: exporta `createRobbie`, el punto de entrada único del módulo visual original.
+- `robbie/RobbieController.ts`: conserva estado actual/anterior, estados temporales, eventos, `hearts()` y `destroy()`.
+- `robbie/RobbieView.ts`: construye capas separadas de ojos, efectos y partículas; cancela animaciones y timers al destruirse.
+- `robbie/RobbiePersonality.ts`: gestiona parpadeos, miradas y happy periódico durante idle.
+- `robbie/RobbieAnimations.ts`: contiene morphing, rebotes, pulsos, vibración y duraciones temporales.
 - `ui/dev-panel.ts`: panel temporal con los diez estados (sustituye al selector de la Fase 1).
 - `styles/`: CSS modular — `base.css` (tokens, reset, foco visible, reduced-motion), `layout.css` (shell, modos, responsive), `robbie.css` (carcasa), `tray.css` (bandeja y panel dev).
 
@@ -72,8 +74,8 @@ Interfaz web con Vite + TypeScript puro (sin React ni frameworks visuales), serv
 
 Robbie se construye íntegramente con HTML y CSS, sin imágenes:
 
-- **Carcasa** marfil mate (`--robbie-ivory`), rectangular compacta con esquinas muy redondeadas y profundidad por sombras suaves e inset.
-- **Pantalla** frontal negra profunda con `aspect-ratio: 2 / 1` (128:64) garantizado por CSS; contiene el `<canvas>` de los ojos.
+- **Carcasa** exterior `.robbie-shell`, marfil mate (`--robbie-ivory`), rectangular compacta con esquinas muy redondeadas y profundidad por sombras suaves e inset.
+- **Pantalla** frontal negra profunda con `aspect-ratio: 2 / 1` (128:64) garantizado por CSS; contiene el árbol DOM transparente de ojos y efectos.
 - **Botón superior** único, bajo y discreto (óvalo), con un aro de luz sutil cuyo color refleja el estado actual (`data-state` + `--ring-color`).
 - **Rejilla de parlante** bajo la pantalla: patrón ordenado de orificios (`radial-gradient` repetido) con sombra interior, integrada en la carcasa.
 - Sin botones laterales, sin cámara y sin micrófono visible (es interno).

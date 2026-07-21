@@ -1,6 +1,6 @@
-import { type RobbieState, type WebSocketEvent } from '@robbie/shared';
+import { ROBBIE_STATE_LABELS, type RobbieState, type WebSocketEvent } from '@robbie/shared';
 import { RobbieConnection, type ConnectionStatus } from './connection';
-import { RobbieView } from './robbie/robbie-view';
+import { createRobbie } from './robbie';
 import { createDevPanel } from './ui/dev-panel';
 import './styles/base.css';
 import './styles/layout.css';
@@ -50,7 +50,21 @@ let currentState: RobbieState = 'idle';
 
 /* ---------- Estado de Robbie ---------- */
 
-const robbieView = new RobbieView('robbie', 'robbie-eyes', 'robot-state-label');
+const robbie = createRobbie({
+  container: requireElement<HTMLElement>('#robbie-eyes-root'),
+  state: 'idle',
+  autoStartPersonality: true,
+});
+
+const stateLabel = requireElement<HTMLElement>('#robot-state-label');
+const updateStateLabel = (state: RobbieState): void => {
+  stateLabel.textContent = ROBBIE_STATE_LABELS[state];
+};
+
+robbie.on('statechange', (event) => {
+  const detail = (event as CustomEvent<{ state: RobbieState }>).detail;
+  if (detail) updateStateLabel(detail.state);
+});
 
 const devPanel = createDevPanel('dev-panel-grid', {
   onStateSelected: (state) => {
@@ -61,7 +75,8 @@ const devPanel = createDevPanel('dev-panel-grid', {
 function applyState(state: RobbieState, notify: boolean): void {
   const previousState = currentState;
   currentState = state;
-  robbieView.setState(state);
+  robbie.setState(state);
+  updateStateLabel(state);
   devPanel.setActiveState(state);
   if (notify) {
     connection.send({
@@ -166,7 +181,10 @@ function initPrimaryAction(): void {
     hint.hidden = false;
   };
   requireElement<HTMLButtonElement>('#primary-action').addEventListener('click', reveal);
-  requireElement<HTMLButtonElement>('#robbie-button').addEventListener('click', reveal);
+  requireElement<HTMLButtonElement>('#robbie-button').addEventListener('click', () => {
+    robbie.hearts();
+    reveal();
+  });
 }
 
 /* ---------- Arranque ---------- */
@@ -178,3 +196,4 @@ showSection('conversar');
 setMode(initialMode());
 applyState('idle', false);
 connection.connect();
+window.addEventListener('pagehide', () => robbie.destroy(), { once: true });

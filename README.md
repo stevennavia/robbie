@@ -3,7 +3,7 @@
 Asistente de escritorio local para macOS. Estado actual del proyecto:
 
 - **Fase 1**: arquitectura base (monorepo con cliente web, servidor local y tipos compartidos).
-- **Fase 2**: diseño visual del MVP — Robbie renderizado en el cliente con una carcasa marfil, pantalla 2:1 con ojos luminosos en Canvas 2D, rejilla de parlante, botón superior, modos completo/compacto y panel temporal de estados.
+- **Fase 2**: diseño visual del MVP — Robbie renderizado en el cliente con una carcasa marfil, pantalla 2:1 con ojos DOM/CSS luminosos, rejilla de parlante, botón superior, modos completo/compacto y panel temporal de estados.
 
 > Fases futuras (aún no implementadas): motor de expresiones, Ollama/IA, voz, Pomodoro, notas, tareas, recordatorios, SQLite, Tauri, ESP32, Bluetooth, WiFi entre dispositivos, GSM y APIs externas.
 
@@ -20,7 +20,7 @@ robbie/
   apps/
     client/        # Interfaz web (Vite + TypeScript, sin frameworks)
       src/
-        robbie/    # Vista de Robbie: ojos, estados visuales y transición de brillo
+        robbie/    # Módulo visual original: ojos, personalidad, efectos y estados temporales
         styles/    # CSS modular: base, layout, robbie, tray
         ui/        # Componentes de interfaz (panel de desarrollo)
     server/        # Servidor local (Express + WebSocket)

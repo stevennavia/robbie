@@ -1,0 +1,68 @@
+.robbie {
+  --robbie-scale: 1;
+  --robbie-eye-width: 22px;
+  --robbie-eye-height: 62px;
+  --robbie-eye-gap: 42px;
+  --robbie-stroke: 8px;
+  --robbie-glow-primary: #eaf5ff;
+  --robbie-glow-secondary: #6c8cff;
+  --robbie-glow-violet: #9b6cff;
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: calc((var(--robbie-eye-gap) + var(--robbie-eye-width) * 2) * var(--robbie-scale));
+  height: calc(150px * var(--robbie-scale));
+  overflow: visible;
+  pointer-events: none;
+  background: transparent;
+  color: var(--robbie-glow-primary);
+  isolation: isolate;
+}
+
+.robbie-eyes, .robbie-effects, .robbie-particles { position: absolute; inset: 0; pointer-events: none; }
+.robbie-eyes { display: flex; align-items: center; justify-content: center; gap: calc(var(--robbie-eye-gap) * var(--robbie-scale)); transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.robbie-eye { width: calc(var(--robbie-eye-width) * var(--robbie-scale)); height: calc(var(--robbie-eye-height) * var(--robbie-scale)); border-radius: 999px; background: var(--robbie-glow-primary); box-shadow: 0 0 8px var(--robbie-glow-primary), 0 0 22px var(--robbie-glow-secondary), 0 0 38px color-mix(in srgb, var(--robbie-glow-violet) 64%, transparent); transition: all .45s cubic-bezier(.22,1,.36,1); }
+.robbie-effects::before, .robbie-effects::after { content: ''; position: absolute; opacity: 0; transition: opacity .4s ease; }
+.robbie[data-state='idle'] .robbie-eyes { animation: robbie-breathe 4.8s ease-in-out infinite; }
+.robbie[data-state='listening'] .robbie-eyes { animation: robbie-listen 1.2s ease-in-out infinite; }
+.robbie[data-state='thinking'] .robbie-eyes { transform: translateY(-7px) rotate(-2deg); }
+.robbie[data-state='thinking'] .robbie-eye { height: calc(49px * var(--robbie-scale)); transform: translateY(3px); }
+.robbie[data-state='speaking'] .robbie-eye { height: calc(47px * var(--robbie-scale)); border-radius: 50% 50% 8px 8px; }
+.robbie[data-state='speaking'] .robbie-eyes { animation: robbie-speak .65s ease-in-out infinite alternate; }
+.robbie[data-state='focus'] .robbie-eyes { transform: rotate(0deg) scale(.94); }
+.robbie[data-state='focus'] .robbie-eye { transform: rotate(38deg); height: calc(42px * var(--robbie-scale)); border-radius: 999px; box-shadow: 0 0 7px var(--robbie-glow-primary), 0 0 18px var(--robbie-glow-secondary); }
+.robbie[data-state='paused'] .robbie-eyes { transform: translateY(8px); animation: robbie-sleep 7s ease-in-out infinite; }
+.robbie[data-state='paused'] .robbie-eye { height: calc(12px * var(--robbie-scale)); border-radius: 50%; }
+.robbie[data-state='success'] .robbie-eye, .robbie[data-gesture='happy'] .robbie-eye { height: calc(31px * var(--robbie-scale)); border: var(--robbie-stroke) solid var(--robbie-glow-primary); border-bottom: 0; border-radius: 999px 999px 0 0; background: transparent; transform: translateY(9px); box-shadow: 0 0 8px var(--robbie-glow-primary), 0 0 24px var(--robbie-glow-secondary), 0 0 34px var(--robbie-glow-violet); }
+.robbie[data-gesture='happy'] .robbie-eyes { animation: robbie-happy 900ms cubic-bezier(.22,1,.36,1); }
+.robbie[data-state='alert'] .robbie-eye { width: calc(45px * var(--robbie-scale)); height: calc(45px * var(--robbie-scale)); border: var(--robbie-stroke) solid var(--robbie-glow-primary); background: transparent; box-shadow: 0 0 12px var(--robbie-glow-primary), 0 0 30px var(--robbie-glow-secondary); }
+.robbie[data-state='error'] .robbie-eye { position: relative; width: calc(45px * var(--robbie-scale)); height: calc(45px * var(--robbie-scale)); border-radius: 0; background: transparent; box-shadow: none; transform: none; }
+.robbie[data-state='error'] .robbie-eye::before, .robbie[data-state='error'] .robbie-eye::after { content: ''; position: absolute; top: 50%; left: 50%; width: 112%; height: calc(8px * var(--robbie-scale)); border-radius: 8px; background: #ff8298; box-shadow: 0 0 12px #ff8298, 0 0 28px #ff4d72; transform: translate(-50%, -50%) rotate(45deg); }
+.robbie[data-state='error'] .robbie-eye::after { transform: translate(-50%, -50%) rotate(-45deg); }
+.robbie[data-state='offline'] .robbie-eye { width: calc(48px * var(--robbie-scale)); height: calc(10px * var(--robbie-scale)); border-radius: 9px; opacity: .62; box-shadow: 0 0 8px var(--robbie-glow-secondary); }
+.robbie[data-state='thinking'] .robbie-particles::before { content: '•  •  •'; position: absolute; top: 4%; left: 56%; color: var(--robbie-glow-violet); font-size: calc(20px * var(--robbie-scale)); letter-spacing: 5px; text-shadow: 0 0 13px var(--robbie-glow-violet); transform: translateX(-50%) rotate(-8deg); animation: robbie-thoughts 3s ease-in-out infinite; }
+.robbie[data-state='listening'] .robbie-effects::before, .robbie[data-state='listening'] .robbie-effects::after { top: 50%; width: calc(26px * var(--robbie-scale)); height: calc(70px * var(--robbie-scale)); border: 4px solid var(--robbie-glow-violet); border-top-color: transparent; border-bottom-color: transparent; border-radius: 50%; opacity: .9; transform: translateY(-50%); animation: robbie-wave 1.2s ease-in-out infinite; }
+.robbie[data-state='listening'] .robbie-effects::before { left: 7%; }
+.robbie[data-state='listening'] .robbie-effects::after { right: 7%; transform: translateY(-50%) rotate(180deg); animation-delay: -600ms; }
+.robbie[data-state='listening'] .robbie-eye { animation: robbie-audio-pulse .75s ease-in-out infinite alternate; }
+.robbie[data-state='focus'] .robbie-effects::after { left: 29%; right: 29%; bottom: 22%; height: 1px; opacity: .72; background: linear-gradient(90deg, transparent, var(--robbie-glow-violet), transparent); box-shadow: 0 0 8px var(--robbie-glow-secondary); }
+.robbie[data-state='paused'] .robbie-particles::after { content: 'z'; position: absolute; right: 18%; top: 13%; color: var(--robbie-glow-violet); font-size: calc(24px * var(--robbie-scale)); opacity: .7; animation: robbie-float 3.2s ease-in-out infinite; }
+.robbie[data-state='alert'] .robbie-effects::after { content: '!'; top: 8%; left: 50%; width: 26px; height: 26px; border: 2px solid var(--robbie-glow-violet); border-radius: 7px; opacity: .85; color: var(--robbie-glow-violet); text-align: center; font: 700 19px/25px system-ui; transform: translateX(-50%); }
+.robbie[data-state='offline'] .robbie-effects::after { content: '⌁'; top: 10%; left: 50%; color: var(--robbie-glow-violet); font-size: 28px; opacity: .7; transform: translateX(-50%) rotate(90deg); }
+.robbie[data-gesture='blink'] .robbie-eye { height: calc(8px * var(--robbie-scale)); }
+.robbie[data-gesture='look-left'] .robbie-eyes { transform: translateX(calc(-7px * var(--robbie-scale))); }
+.robbie[data-gesture='look-right'] .robbie-eyes { transform: translateX(calc(7px * var(--robbie-scale))); }
+.robbie[data-gesture='happy'] .robbie-particles::before, .robbie[data-state='success'] .robbie-particles::before { content: '✦  ˚  ✦'; position: absolute; top: 20%; left: 50%; color: var(--robbie-glow-violet); font-size: calc(20px * var(--robbie-scale)); letter-spacing: 10px; text-shadow: 0 0 14px var(--robbie-glow-violet); transform: translateX(-50%); animation: robbie-sparkle 900ms ease-out; }
+.robbie-heart { position: absolute; left: calc(50% + var(--heart-x) * var(--robbie-scale)); top: calc(50% + var(--heart-y) * var(--robbie-scale)); color: var(--heart-color); font-size: calc(18px * var(--robbie-scale)); line-height: 1; text-shadow: 0 0 8px currentColor, 0 0 18px currentColor; opacity: 0; animation: robbie-heart-rise 1400ms cubic-bezier(.22,1,.36,1) var(--heart-delay) both; }
+@keyframes robbie-breathe { 50% { transform: scaleY(.92); filter: brightness(1.16); } }
+@keyframes robbie-listen { 50% { transform: scaleY(1.08); filter: brightness(1.3); } }
+@keyframes robbie-audio-pulse { to { filter: brightness(1.42); transform: scaleY(1.1); } }
+@keyframes robbie-speak { to { transform: translateY(-3px) scaleY(1.08); } }
+@keyframes robbie-happy { 35% { transform: translateY(-8px) scale(1.06); } 100% { transform: translateY(0) scale(1); } }
+@keyframes robbie-thoughts { 50% { transform: translate(-4px, -5px) rotate(-8deg); opacity: .5; } }
+@keyframes robbie-sparkle { 50% { transform: translate(-50%, -8px) scale(1.15); } }
+@keyframes robbie-heart-rise { 0% { opacity: 0; transform: translateY(12px) scale(.65) rotate(-10deg); } 18% { opacity: 1; } 100% { opacity: 0; transform: translateY(-48px) scale(1.1) rotate(10deg); } }
+@keyframes robbie-sleep { 50% { transform: translateY(11px) scaleX(.92); filter: brightness(.75); } }
+@keyframes robbie-wave { 50% { opacity: .3; transform: translateY(-50%) scaleY(.75); } }
+@keyframes robbie-float { 50% { transform: translate(6px, -10px); opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .robbie * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; } }
