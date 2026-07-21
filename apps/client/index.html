@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Robbie Virtual</title>
+  </head>
+  <body>
+    <div class="app" data-mode="full">
+      <header class="app-header">
+        <h1 class="app-title">Robbie</h1>
+        <div class="app-header-actions">
+          <button type="button" id="mode-toggle" class="mode-toggle" aria-pressed="false">
+            Modo compacto
+          </button>
+          <div id="connection-status" class="connection-status" data-status="disconnected" role="status">
+            <span class="connection-dot" aria-hidden="true"></span>
+            <span class="connection-text">Servidor desconectado</span>
+          </div>
+        </div>
+      </header>
+
+      <nav class="app-nav" aria-label="Secciones">
+        <button type="button" class="nav-button" data-section="conversar" aria-current="page">Conversar</button>
+        <button type="button" class="nav-button" data-section="enfoque">Enfoque</button>
+        <button type="button" class="nav-button" data-section="capturar">Capturar</button>
+        <button type="button" class="nav-button" data-section="ajustes">Ajustes</button>
+      </nav>
+
+      <main class="app-main">
+        <section class="stage" aria-label="Robbie">
+          <div class="robbie" id="robbie" data-state="idle">
+            <button type="button" class="robbie__top-button" id="robbie-button" aria-label="Botón principal de Robbie">
+              <span class="robbie__top-button-ring" aria-hidden="true"></span>
+            </button>
+            <div class="robbie__casing">
+              <div class="robbie__screen">
+                <canvas
+                  class="robbie__eyes-canvas"
+                  id="robbie-eyes"
+                  role="img"
+                  aria-label="Ojos de Robbie"
+                ></canvas>
+              </div>
+              <div class="robbie__grille" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <p class="stage-state" id="robot-state-label" aria-live="polite">En reposo</p>
+
+          <div class="stage-action">
+            <button type="button" class="primary-action" id="primary-action">Conversar</button>
+          </div>
+
+          <p class="stage-hint" id="stage-hint" hidden>La conversación con IA llegará en una fase futura.</p>
+        </section>
+
+        <aside class="tray" aria-label="Panel lateral">
+          <section id="section-content" class="section-content" aria-live="polite"></section>
+
+          <section class="dev-panel" aria-label="Panel de desarrollo">
+            <h2 class="dev-panel__title">
+              Estados de Robbie
+              <span class="dev-panel__badge">temporal</span>
+            </h2>
+            <div class="dev-panel__grid" id="dev-panel-grid" role="group" aria-label="Probar estados"></div>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

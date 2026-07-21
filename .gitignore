@@ -1,0 +1,17 @@
+# Dependencias
+node_modules/
+
+# Salidas de compilación
+dist/
+coverage/
+
+# Entorno local
+.env
+.env.local
+
+# Logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

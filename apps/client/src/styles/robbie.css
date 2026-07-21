@@ -1,0 +1,122 @@
+/* ============================================================
+   robbie.css — la carcasa de Robbie: botón superior, pantalla
+   con canvas de ojos y rejilla del parlante. Sin imágenes.
+   ============================================================ */
+
+.robbie {
+  /* Color del aro de luz del botón: cambia con data-state (ver abajo) */
+  --ring-color: var(--color-accent);
+
+  position: relative;
+  width: clamp(15rem, 34vw, 22rem);
+  padding-top: 0.45rem; /* aloja la mitad visible del botón superior */
+}
+
+/* ---------- Botón superior: único, bajo y discreto ---------- */
+
+.robbie__top-button {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  width: 2.5rem;
+  height: 0.9rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--robbie-ivory-deep);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.25),
+    0 1px 0 rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.robbie__top-button:hover {
+  background: #e2d9c8;
+}
+
+.robbie__top-button:active {
+  transform: translateX(-50%) scale(0.94);
+}
+
+/* Aro de luz sutil alrededor del botón */
+.robbie__top-button-ring {
+  position: absolute;
+  inset: -0.3rem -0.45rem;
+  border-radius: 999px;
+  box-shadow: 0 0 0.55rem 0.1rem var(--ring-color);
+  opacity: 0.5;
+  pointer-events: none;
+  transition: box-shadow 0.3s ease, opacity 0.3s ease;
+}
+
+/* ---------- Carcasa: marfil mate, rectangular, muy redondeada ---------- */
+
+.robbie__casing {
+  background: var(--robbie-ivory);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem 1.4rem 1.3rem;
+  box-shadow:
+    var(--shadow-soft),
+    inset 0 2px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -0.4rem 0 rgba(0, 0, 0, 0.05);
+}
+
+/* ---------- Pantalla: negra profunda, siempre 2:1 (128:64) ---------- */
+
+.robbie__screen {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  background: var(--robbie-screen);
+  border-radius: 1.1rem;
+  box-shadow:
+    inset 0 0.3rem 1rem rgba(0, 0, 0, 0.85),
+    0 1px 0 rgba(255, 255, 255, 0.35); /* filo claro: pantalla empotrada */
+}
+
+.robbie__eyes-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Rejilla del parlante: perforada en la carcasa ---------- */
+
+.robbie__grille {
+  margin-top: 1.2rem;
+  height: 3.2rem;
+  border-radius: 0.9rem;
+  background-image: radial-gradient(
+    circle at center,
+    var(--robbie-grille-hole) 0.13rem,
+    transparent 0.14rem
+  );
+  background-size: 0.8rem 0.8rem;
+  background-position: center;
+  box-shadow:
+    inset 0 0.15rem 0.45rem rgba(0, 0, 0, 0.16),
+    0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ---------- Variación visual por estado: color del aro de luz ---------- */
+
+.robbie[data-state='idle'] { --ring-color: var(--color-accent); }
+.robbie[data-state='listening'] { --ring-color: var(--color-success); }
+.robbie[data-state='thinking'] { --ring-color: var(--color-warning); }
+.robbie[data-state='speaking'] { --ring-color: var(--color-violet); }
+.robbie[data-state='focus'] { --ring-color: var(--color-teal); }
+.robbie[data-state='paused'] { --ring-color: var(--color-text-muted); }
+.robbie[data-state='success'] { --ring-color: var(--color-success); }
+.robbie[data-state='alert'] { --ring-color: var(--color-accent-orange); }
+.robbie[data-state='error'] { --ring-color: var(--color-danger); }
+.robbie[data-state='offline'] { --ring-color: var(--color-border); }
+
+.robbie[data-state='offline'] .robbie__top-button-ring,
+.robbie[data-state='paused'] .robbie__top-button-ring {
+  opacity: 0.25;
+}

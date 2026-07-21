@@ -1,0 +1,82 @@
+/* ============================================================
+   base.css — tokens de diseño, reset y accesibilidad global
+   ============================================================ */
+
+:root {
+  /* Superficies y texto (tema oscuro de escritorio) */
+  --color-bg: #0f1115;
+  --color-surface: #171a21;
+  --color-surface-raised: #1f232d;
+  --color-border: #2a2f3a;
+  --color-text: #e6e8ee;
+  --color-text-muted: #9aa3b2;
+
+  /* Acentos: celeste y naranja, con sobriedad */
+  --color-accent: #4cc2ff;
+  --color-accent-orange: #ff9f43;
+  --color-success: #3ecf8e;
+  --color-warning: #f5a623;
+  --color-danger: #ef5261;
+  --color-violet: #b18cff;
+  --color-teal: #46d0c4;
+
+  /* Materiales de Robbie */
+  --robbie-ivory: #ece5d8;
+  --robbie-ivory-deep: #d9d0be;
+  --robbie-screen: #060709;
+  --robbie-eye: #5ac8fa;
+  --robbie-grille-hole: #a29885;
+
+  /* Sombras suaves */
+  --shadow-soft: 0 1.5rem 3rem rgba(0, 0, 0, 0.45);
+  --shadow-raised: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.35);
+
+  /* Geometría */
+  --radius: 0.75rem;
+  --radius-lg: 2rem;
+
+  /* Espaciado */
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+
+  --font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Foco visible y consistente en todo lo interactivo */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Movimiento reducido: sin transiciones ni animaciones */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

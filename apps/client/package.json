@@ -1,0 +1,21 @@
+{
+  "name": "@robbie/client",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Cliente web local de Robbie Virtual (Vite + TypeScript)",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@robbie/shared": "*",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}

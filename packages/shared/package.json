@@ -1,0 +1,27 @@
+{
+  "name": "@robbie/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Tipos y esquemas Zod compartidos entre el cliente y el servidor de Robbie",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "zod": "^3.25.0"
+  }
+}
