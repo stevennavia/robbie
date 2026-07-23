@@ -27,21 +27,21 @@ export class RobbiePersonality {
     this.schedule(() => {
       if (this.getState() === 'idle') this.play('blink', 190);
       this.scheduleBlink();
-    }, 3000, 7000);
+    }, 2500, 6000);
   }
 
   private scheduleLook(): void {
     this.schedule(() => {
-      if (this.getState() === 'idle') this.play(Math.random() > 0.5 ? 'look-left' : 'look-right', 550);
+      if (this.getState() === 'idle') this.play(Math.random() > 0.5 ? 'look-left' : 'look-right', 760);
       this.scheduleLook();
-    }, 5200, 9800);
+    }, 9000, 16000);
   }
 
   private scheduleHappy(): void {
     this.schedule(() => {
-      if (this.getState() === 'idle') this.play('happy', 900);
+      if (this.getState() === 'idle') this.play('happy', 1900);
       this.scheduleHappy();
-    }, 20000, 35000);
+    }, 10000, 20000);
   }
 
   private play(gesture: Gesture, duration: number): void {

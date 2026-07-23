@@ -13,7 +13,7 @@ export function animateState(root: HTMLElement, state: RobbieState): Animation |
       { opacity: 0.78, transform: 'scaleX(.88) scaleY(.92)' },
       { opacity: 1, transform: 'scaleX(1) scaleY(1)' },
     ],
-    { duration: 360, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'both' },
+    { duration: 480, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'both' },
   );
   root.style.setProperty('--robbie-transition-state', `"${state}"`);
   return animation;

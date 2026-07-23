@@ -46,6 +46,7 @@ export class RobbieView {
 
   playHearts(): void {
     this.clearHearts();
+    this.root.dataset.hearts = 'true';
     const colors = ['#ff92d0', '#c39bff', '#ffb5e5', '#a990ff', '#f6d2ff'];
     for (let index = 0; index < 6; index += 1) {
       const heart = document.createElement('span');
@@ -78,6 +79,7 @@ export class RobbieView {
   private clearHearts(): void {
     if (this.heartTimer !== undefined) window.clearTimeout(this.heartTimer);
     this.heartTimer = undefined;
+    delete this.root.dataset.hearts;
     this.particles.querySelectorAll('.robbie-heart').forEach((heart) => heart.remove());
   }
 

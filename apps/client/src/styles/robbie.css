@@ -52,16 +52,14 @@
   transition: box-shadow 0.3s ease, opacity 0.3s ease;
 }
 
-/* ---------- Carcasa: marfil mate, rectangular, muy redondeada ---------- */
+/* ---------- Cuerpo: transparente con outline redondeado ---------- */
 
 .robbie__casing {
-  background: var(--robbie-ivory);
+  background: transparent;
   border-radius: var(--radius-lg);
   padding: 1.4rem 1.4rem 1.3rem;
-  box-shadow:
-    var(--shadow-soft),
-    inset 0 2px 0 rgba(255, 255, 255, 0.55),
-    inset 0 -0.4rem 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
+  box-shadow: none;
 }
 
 /* ---------- Pantalla: negra profunda, siempre 2:1 (128:64) ---------- */

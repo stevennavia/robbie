@@ -29,7 +29,7 @@ export const ROBBIE_STATE_LABELS: Record<RobbieState, string> = {
   speaking: 'Hablando',
   focus: 'Enfoque',
   paused: 'En pausa',
-  success: 'Éxito',
+  success: 'Feliz',
   alert: 'Alerta',
   error: 'Error',
   offline: 'Sin conexión',

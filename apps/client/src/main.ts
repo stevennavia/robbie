@@ -46,9 +46,24 @@ function requireElement<T extends HTMLElement>(selector: string): T {
   return element;
 }
 
-let currentState: RobbieState = 'idle';
+/* ---------- Expresiones de Robbie ----------
+ *
+ * Estados funcionales y su expresión visual actual:
+ *   idle     → reposo, parpadeo espontáneo y miradas
+ *   thinking → ojos entrecerrados, mirando arriba, partículas "• • •"
+ *   speaking → ojos achatados, animación de habla
+ *   success  → expresión feliz con dos arcos
+ *   error    → ojos como X (líneas rosadas cruzadas)
+ *   offline  → ojos atenuados, línea horizontal
+ *
+ * Los estados listening, focus, paused, alert también tienen
+ * expresión CSS definida pero no son parte del mapeo mínimo.
+ *
+ * setRobbieState es la única función para cambiar el estado
+ * visual de Robbie. Conecta: controller → view → CSS.
+ */
 
-/* ---------- Estado de Robbie ---------- */
+let currentState: RobbieState = 'idle';
 
 const robbie = createRobbie({
   container: requireElement<HTMLElement>('#robbie-eyes-root'),
@@ -68,11 +83,11 @@ robbie.on('statechange', (event) => {
 
 const devPanel = createDevPanel('dev-panel-grid', {
   onStateSelected: (state) => {
-    applyState(state, true);
+    setRobbieState(state, true);
   },
 });
 
-function applyState(state: RobbieState, notify: boolean): void {
+function setRobbieState(state: RobbieState, notify: boolean): void {
   const previousState = currentState;
   currentState = state;
   robbie.setState(state);
@@ -102,7 +117,7 @@ function handleServerEvent(event: WebSocketEvent): void {
     case 'connection.ready':
       break; // El indicador de conexión ya refleja el estado.
     case 'robbie.state.changed':
-      applyState(event.payload.state, false);
+      setRobbieState(event.payload.state, false);
       break;
     case 'system.error':
       console.warn(`[robbie] Error del servidor: ${event.payload.error.message}`);
@@ -194,6 +209,6 @@ initModeToggle();
 initPrimaryAction();
 showSection('conversar');
 setMode(initialMode());
-applyState('idle', false);
+setRobbieState('idle', false);
 connection.connect();
 window.addEventListener('pagehide', () => robbie.destroy(), { once: true });

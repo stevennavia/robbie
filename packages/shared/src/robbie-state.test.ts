@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { ROBBIE_STATES, isRobbieState, robbieStateSchema } from './robbie-state.js';
+import { ROBBIE_STATE_LABELS, ROBBIE_STATES, isRobbieState, robbieStateSchema } from './robbie-state.js';
 
 describe('robbieStateSchema', () => {
   it('define exactamente los 10 estados de Robbie', () => {
     expect(ROBBIE_STATES).toHaveLength(10);
+  });
+
+  it('muestra success con la etiqueta Feliz', () => {
+    expect(ROBBIE_STATE_LABELS.success).toBe('Feliz');
   });
 
   it.each(ROBBIE_STATES)('acepta el estado "%s"', (state) => {
