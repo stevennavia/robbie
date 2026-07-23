@@ -4,23 +4,25 @@ import type { AppConfig } from './config.js';
 import { errorHandler, notFoundHandler } from './middleware/error-handler.js';
 import { healthRouter } from './routes/health.js';
 import { createRootRouter } from './routes/root.js';
+import type { PomodoroTimerService } from './pomodoro/service.js';
+import { createPomodoroRouter } from './pomodoro/routes.js';
 
-export function createApp(config: AppConfig): Express {
+export function createApp(config: AppConfig, pomodoroService?: PomodoroTimerService): Express {
   const app = express();
 
   app.disable('x-powered-by');
   app.use(express.json());
 
-  // CORS restringido únicamente al cliente local configurado.
   app.use(cors({ origin: config.CLIENT_ORIGIN }));
 
   app.use('/', createRootRouter(config));
   app.use('/api/health', healthRouter);
 
-  // Cualquier ruta no registrada recibe un 404 estructurado.
-  app.use(notFoundHandler);
+  if (pomodoroService) {
+    app.use('/api/pomodoro', createPomodoroRouter(pomodoroService));
+  }
 
-  // Middleware centralizado de errores (siempre el último).
+  app.use(notFoundHandler);
   app.use(errorHandler);
 
   return app;

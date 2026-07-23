@@ -1,7 +1,11 @@
 import { createServer } from 'node:http';
 import { createApp } from './app.js';
 import { loadConfig, loadRootEnvFile } from './config.js';
-import { createWebSocketServer } from './websocket.js';
+import { createWebSocketServer, broadcast } from './websocket.js';
+import { PomodoroTimerService } from './pomodoro/service.js';
+import { initDb, closeDb } from './pomodoro/db.js';
+import type { WebSocketEvent } from '@robbie/shared';
+import type { PomodoroEvent } from './pomodoro/service.js';
 
 function log(message: string): void {
   console.log(`[${new Date().toISOString()}] ${message}`);
@@ -10,11 +14,8 @@ function log(message: string): void {
 loadRootEnvFile();
 const config = loadConfig();
 
-const app = createApp(config);
-const server = createServer(app);
+const server = createServer();
 
-// Errores de arranque con mensajes claros. Este listener se registra ANTES
-// de crear el WebSocketServer para que se ejecute primero y salga limpio.
 server.on('error', (error: NodeJS.ErrnoException) => {
   if (error.code === 'EADDRINUSE') {
     log(`Error: el puerto ${config.PORT} ya está en uso en ${config.HOST}.`);
@@ -30,26 +31,44 @@ server.on('error', (error: NodeJS.ErrnoException) => {
 
 const wss = createWebSocketServer(server, config);
 
-// ws re-emite los errores del servidor HTTP en la instancia de WebSocketServer;
-// sin este listener el proceso moriría con "Unhandled 'error' event".
 wss.on('error', (error: Error) => {
   log(`Error del servidor WebSocket: ${error.message}`);
 });
 
-server.listen(config.PORT, config.HOST, () => {
-  log(`robbie-server escuchando en http://${config.HOST}:${config.PORT} (entorno: ${config.NODE_ENV})`);
-  log(`WebSocket disponible en ws://${config.HOST}:${config.PORT}/ws`);
-  log(`Origen del cliente permitido: ${config.CLIENT_ORIGIN}`);
+function toWsEvent(event: PomodoroEvent): WebSocketEvent {
+  return { type: event.type as WebSocketEvent['type'], payload: event.payload as WebSocketEvent['payload'] } as WebSocketEvent;
+}
+
+async function start(): Promise<void> {
+  await initDb();
+
+  const pomodoroService = new PomodoroTimerService((pomodoroEvent) => {
+    broadcast(wss, toWsEvent(pomodoroEvent));
+  });
+
+  const app = createApp(config, pomodoroService);
+  server.on('request', app);
+
+  server.listen(config.PORT, config.HOST, () => {
+    log(`robbie-server escuchando en http://${config.HOST}:${config.PORT} (entorno: ${config.NODE_ENV})`);
+    log(`WebSocket disponible en ws://${config.HOST}:${config.PORT}/ws`);
+    log(`Origen del cliente permitido: ${config.CLIENT_ORIGIN}`);
+  });
+}
+
+start().catch((error) => {
+  log(`Error al iniciar el servidor: ${error instanceof Error ? error.message : String(error)}`);
+  process.exit(1);
 });
 
 let shuttingDown = false;
 
 function shutdown(signal: string): void {
-  if (shuttingDown) {
-    return;
-  }
+  if (shuttingDown) return;
   shuttingDown = true;
   log(`Señal ${signal} recibida. Cerrando el servidor...`);
+
+  closeDb().catch(() => {});
 
   for (const client of wss.clients) {
     client.close(1001, 'Servidor detenido');
@@ -61,16 +80,11 @@ function shutdown(signal: string): void {
     process.exit(0);
   });
 
-  // Salida forzada si alguna conexión no se cierra a tiempo.
   setTimeout(() => {
     log('Tiempo de cierre agotado. Saliendo de forma forzada.');
     process.exit(1);
   }, 5000).unref();
 }
 
-process.on('SIGINT', () => {
-  shutdown('SIGINT');
-});
-process.on('SIGTERM', () => {
-  shutdown('SIGTERM');
-});
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));

@@ -4,16 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <title>Robbie Virtual</title>
   </head>
   <body>
-    <div class="app" data-mode="full">
+    <div class="app" data-mode="full" data-window="dashboard">
       <header class="app-header">
         <h1 class="app-title">Robbie</h1>
         <div class="app-header-actions">
           <button type="button" id="mode-toggle" class="mode-toggle" aria-pressed="false">
             Modo compacto
+          </button>
+          <button type="button" id="pin-toggle" class="pin-toggle" data-pinned="false" aria-pressed="false" hidden>
+            No fijado
+          </button>
+          <button type="button" id="show-robbie" class="show-robbie">Mostrar Robbie</button>
+          <button type="button" id="size-mode-toggle" class="show-robbie" aria-pressed="false">
+            Modo hardware
           </button>
           <div id="connection-status" class="connection-status" data-status="disconnected" role="status">
             <span class="connection-dot" aria-hidden="true"></span>
@@ -32,17 +39,15 @@
       <main class="app-main">
         <section class="stage" aria-label="Robbie">
           <div class="robbie-shell" id="robbie" data-state="idle">
-            <button type="button" class="robbie__top-button" id="robbie-button" aria-label="Botón principal de Robbie">
-              <span class="robbie__top-button-ring" aria-hidden="true"></span>
-            </button>
-            <div class="robbie__casing">
-              <div class="robbie__screen">
+              <div class="robbie__casing" data-tauri-drag-region>
+              <div class="robbie__screen" data-tauri-drag-region>
                 <div
                   class="robbie-visual"
                   id="robbie-eyes-root"
                   role="img"
                   aria-label="Ojos de Robbie"
                 ></div>
+                <div class="robbie-display-overlay" id="robbie-display-overlay" role="timer" aria-live="polite"></div>
               </div>
               <div class="robbie__grille" aria-hidden="true"></div>
             </div>

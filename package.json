@@ -13,13 +13,16 @@
     "dev": "npm run build -w @robbie/shared && concurrently -k --names shared,server,client --prefix-colors blue,green,magenta \"npm run dev -w @robbie/shared\" \"npm run dev -w @robbie/server\" \"npm run dev -w @robbie/client\"",
     "dev:client": "npm run dev -w @robbie/client",
     "dev:server": "npm run build -w @robbie/shared && npm run dev -w @robbie/server",
+    "dev:tauri": "concurrently -k --names server,tauri --prefix-colors green,blue \"npm run dev:server\" \"npm run tauri dev\"",
     "build": "npm run build -w @robbie/shared && npm run build -w @robbie/server && npm run build -w @robbie/client",
     "test": "npm run build -w @robbie/shared && npm run test -w @robbie/shared && npm run test -w @robbie/server && npm run test -w @robbie/client",
     "typecheck": "npm run build -w @robbie/shared && npm run typecheck --workspaces --if-present",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "tauri": "tauri"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
+    "@tauri-apps/cli": "^2.5.0",
     "concurrently": "^9.1.2",
     "eslint": "^9.18.0",
     "typescript": "^5.8.3",

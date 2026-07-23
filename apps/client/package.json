@@ -12,6 +12,7 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@tauri-apps/api": "^2.5.0",
     "@robbie/shared": "*",
     "zod": "^3.25.0"
   },

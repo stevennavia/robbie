@@ -4,8 +4,9 @@ Asistente de escritorio local para macOS. Estado actual del proyecto:
 
 - **Fase 1**: arquitectura base (monorepo con cliente web, servidor local y tipos compartidos).
 - **Fase 2**: diseño visual del MVP — Robbie renderizado en el cliente con una carcasa marfil, pantalla 2:1 con ojos DOM/CSS luminosos, rejilla de parlante, botón superior, modos completo/compacto y panel temporal de estados.
+- **Fase 3 inicial**: empaquetado Tauri con una ventana flotante exclusiva para Robbie y un dashboard independiente.
 
-> Fases futuras (aún no implementadas): motor de expresiones, Ollama/IA, voz, Pomodoro, notas, tareas, recordatorios, SQLite, Tauri, ESP32, Bluetooth, WiFi entre dispositivos, GSM y APIs externas.
+> Fases futuras (aún no implementadas): motor de expresiones, Ollama/IA, voz, Pomodoro, notas, tareas, recordatorios, SQLite, sidecar autocontenido del servidor, ESP32, Bluetooth, WiFi entre dispositivos, GSM y APIs externas.
 
 ## Requisitos
 
@@ -26,6 +27,7 @@ robbie/
     server/        # Servidor local (Express + WebSocket)
   packages/
     shared/        # Tipos y esquemas Zod compartidos (@robbie/shared)
+  src-tauri/       # Aplicación Tauri y configuración de las ventanas
   data/            # Datos locales (reservado para fases futuras)
   docs/            # Documentación técnica
 ```
@@ -54,6 +56,14 @@ npm run dev
 
 Después abre **http://localhost:5173** en el navegador.
 
+Para abrir la aplicación de escritorio durante el desarrollo:
+
+```bash
+npm run dev:tauri
+```
+
+Tauri crea dos ventanas sobre el mismo cliente: `dashboard` muestra la interfaz completa y `robbie` muestra solo el dispositivo, sin marco y siempre visible.
+
 ### Modos de visualización
 
 - **Modo completo** (por defecto): Robbie, navegación, bandeja lateral con las secciones y el panel temporal de estados.
@@ -81,6 +91,7 @@ Endpoints disponibles:
 | `npm run dev` | Inicia cliente y servidor al mismo tiempo |
 | `npm run dev:client` | Inicia solo el cliente |
 | `npm run dev:server` | Inicia solo el servidor (compila `shared` antes) |
+| `npm run dev:tauri` | Inicia el servidor local y la aplicación Tauri con dos ventanas |
 | `npm run build` | Compila los tres paquetes (`shared` → `server` → `client`) |
 | `npm run test` | Ejecuta las pruebas con Vitest |
 | `npm run typecheck` | Verifica los tipos de TypeScript en todos los paquetes |

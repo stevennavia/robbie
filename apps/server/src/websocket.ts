@@ -28,7 +28,7 @@ function sendSystemError(socket: WebSocket, code: string, message: string, detai
   sendEvent(socket, event);
 }
 
-function broadcast(wss: WebSocketServer, event: WebSocketEvent): void {
+export function broadcast(wss: WebSocketServer, event: WebSocketEvent): void {
   const message = JSON.stringify(event);
   for (const client of wss.clients) {
     if (client.readyState === WebSocket.OPEN) {
@@ -39,15 +39,9 @@ function broadcast(wss: WebSocketServer, event: WebSocketEvent): void {
 
 function isOriginAllowed(req: IncomingMessage, config: AppConfig): boolean {
   const origin = req.headers.origin;
-  // Clientes sin cabecera Origin (herramientas locales) se permiten;
-  // los navegadores siempre la envían y deben coincidir con el cliente configurado.
   return origin === undefined || origin === config.CLIENT_ORIGIN;
 }
 
-/**
- * Adjunta un servidor WebSocket (path /ws) al servidor HTTP existente.
- * Al conectarse, cada cliente recibe el evento `connection.ready`.
- */
 export function createWebSocketServer(server: HttpServer, config: AppConfig): WebSocketServer {
   const wss = new WebSocketServer({ server, path: '/ws' });
 

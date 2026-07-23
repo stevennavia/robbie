@@ -46,14 +46,14 @@ describe('módulo visual original de Robbie', () => {
 
   it('define una boca sólida y animada para speaking sin glow', () => {
     const mouth = cssRule(".robbie[data-state='speaking'] .robbie-effects::before");
-    const mouthAnimation = cssRule('@keyframes robbie-speak-mouth');
+    const mouthAnimation = ROBBIE_CSS.match(/@keyframes robbie-speak-mouth \{[\s\S]*?\n\}/)?.[0] ?? '';
 
     expect(mouth).toContain("background: var(--robbie-glow-primary)");
     expect(mouth).toContain('width: calc(30px * var(--robbie-scale))');
     expect(mouth).toContain('height: calc(14px * var(--robbie-scale))');
-    expect(mouth).toContain('left: calc(50% + 3px)');
-    expect(mouth).toContain('top: calc(50% + 41px)');
-    expect(mouth).toContain('border-radius: 6px 6px 999px 999px');
+    expect(mouth).toContain('left: calc(50% + 3px * var(--robbie-scale))');
+    expect(mouth).toContain('top: calc(50% + 41px * var(--robbie-scale))');
+    expect(mouth).toContain('border-radius: calc(6px * var(--robbie-scale))');
     expect(mouth).toContain('box-shadow: none');
     expect(mouth).toContain('filter: none');
     expect(mouth).toContain('animation: robbie-speak-mouth 880ms');
@@ -82,7 +82,7 @@ describe('módulo visual original de Robbie', () => {
     expect(eye).toContain('transition: all 600ms cubic-bezier');
     expect(happyArc).toContain('opacity: 0');
     expect(happyArc).toContain('animation: robbie-happy-arc-in 600ms');
-    expect(happyAnimation).toContain('translateY(-4px) scale(1.02)');
+    expect(happyAnimation).toContain('translateY(calc(-4px * var(--robbie-scale))) scale(1.02)');
     expect(happyAnimation).not.toContain('translateY(-8px)');
     expect(happyAnimation).not.toContain('scale(1.06)');
     expect(arcAnimation).toContain('opacity');
@@ -113,9 +113,11 @@ describe('módulo visual original de Robbie', () => {
     expect(coffeeCup).toContain('background-image: var(--robbie-coffee-cup-image)');
     expect(coffeeCup).toContain('width: calc(38px * var(--robbie-scale))');
     expect(coffeeCup).toContain('height: calc(34px * var(--robbie-scale))');
+    expect(coffeeCup).toContain('top: calc(50% + 31px * var(--robbie-scale))');
     expect(coffeeCup).toContain('right: calc(-54px * var(--robbie-scale))');
     expect(coffeeSteam).toContain('background-image: var(--robbie-coffee-steam-image)');
     expect(coffeeSteam).toContain('right: calc(-50px * var(--robbie-scale))');
+    expect(coffeeSteam).toContain('top: calc(50% + 10px * var(--robbie-scale))');
     expect(coffeeSteam).toContain('animation: robbie-coffee-steam 3.2s');
     expect(ROBBIE_CSS).toContain("stroke='%23eaf5ff'");
     expect(ROBBIE_CSS).toContain("stroke='%239b6cff'");
@@ -166,5 +168,25 @@ describe('módulo visual original de Robbie', () => {
     expect(curveGlow).toContain('opacity');
     expect(curveGlow).not.toMatch(/transform|width|height|border|radius/);
     expect(ROBBIE_CSS).toMatch(/prefers-reduced-motion:[^{]+\{[\s\S]*robbie-particles::before/);
+  });
+
+  it('escala ondas, burbujas, corazones, focus y boca dentro de 128×64', () => {
+    const listeningLeft = cssRule(".robbie[data-state='listening'] .robbie-eye-left::before");
+    const thinkingDots = ROBBIE_CSS.match(/\.robbie\[data-state='thinking'\] \.robbie-particles::before \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    const heart = cssRule('.robbie-heart');
+    const focusEyes = cssRule(".robbie[data-state='focus'] .robbie-eyes");
+    const mouthAnimation = ROBBIE_CSS.match(/@keyframes robbie-speak-mouth \{[\s\S]*?\n\}/)?.[0] ?? '';
+
+    expect(listeningLeft).toContain('margin-right: calc(10px * var(--robbie-scale))');
+    expect(listeningLeft).toContain('border-left: calc(3px * var(--robbie-scale))');
+    expect(thinkingDots).toContain('right: calc(-34px * var(--robbie-scale))');
+    expect(thinkingDots).toContain('width: calc(4px * var(--robbie-scale))');
+    expect(heart).toContain('text-shadow: 0 0 calc(8px * var(--robbie-scale))');
+    expect(ROBBIE_CSS).toContain('translateY(calc(-48px * var(--robbie-scale)))');
+    expect(focusEyes).toContain('translateY(calc(-12px * var(--robbie-scale)))');
+    expect(ROBBIE_CSS).toContain('translateY(calc(-14px * var(--robbie-scale)))');
+    expect(mouthAnimation).toContain('translateY(calc(1px * var(--robbie-scale)))');
+    expect(mouthAnimation).toContain('translateY(calc(-1px * var(--robbie-scale)))');
+    expect(mouthAnimation).toContain('width: calc(32px * var(--robbie-scale))');
   });
 });

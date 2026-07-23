@@ -27,6 +27,15 @@ Robbie Virtual es un asistente de escritorio **local** para macOS. La Fase 1 est
 └────────────────────────────────────────────────────────────┘
 ```
 
+### Aplicación de escritorio Tauri
+
+`src-tauri/` añade una capa nativa sobre el mismo cliente Vite. La configuración crea dos webviews dentro de una sola aplicación:
+
+- `dashboard`: ventana normal, redimensionable y con navegación, bandeja y controles.
+- `robbie`: ventana transparente, sin decoraciones, fija y siempre visible; carga el cliente con `?window=robbie` y oculta todo salvo el dispositivo.
+
+`apps/client/src/tauri-bridge.ts` encapsula los eventos entre ventanas (`state-changed`, `button-pressed`, `ready` y `request-state`). En navegador el adaptador queda inactivo, por lo que la ejecución web existente no cambia. El WebSocket continúa siendo el canal del servidor local; los eventos Tauri coordinan las dos ventanas.
+
 ## Paquetes
 
 ### `packages/shared` — `@robbie/shared`
@@ -87,6 +96,8 @@ Al cambiar de estado solo varían tres cosas: la etiqueta, la intensidad de los 
 - **Completo**: grid `nav | Robbie | bandeja (20rem)`. Robbie es el protagonista; la bandeja contiene la sección activa y el panel de desarrollo.
 - **Compacto**: solo Robbie, su estado y la acción principal (placeholder de «Conversar»). Sin bandeja ni navegación.
 
+En escritorio, el modo de ventana `robbie` es independiente del modo web `compact`: la primera ventana solo contiene el dispositivo y el dashboard permanece en una ventana separada.
+
 Responsive: a ≤1100px la bandeja pasa debajo del escenario (nunca fuera de pantalla); a ≤760px la navegación se convierte en barra inferior. Sin scroll horizontal en ninguna resolución objetivo (1440×900, 1280×800, 1024×768, ventana compacta).
 
 ## Flujos de datos
@@ -125,4 +136,4 @@ cliente ──{ type: "robbie.state.changed", payload: { state } }──▶ serv
 
 ## Pospuesto para fases futuras
 
-Motor completo de expresiones de Robbie (Fase 3), Ollama e IA, voz, Pomodoro, notas/tareas/recordatorios, SQLite (el directorio `data/` queda reservado), empaquetado con Tauri, ESP32, Bluetooth, WiFi entre dispositivos, GSM y APIs externas.
+Motor completo de expresiones de Robbie, Ollama e IA, voz, Pomodoro, notas/tareas/recordatorios, SQLite (el directorio `data/` queda reservado), sidecar autocontenido del servidor Node, ESP32, Bluetooth, WiFi entre dispositivos, GSM y APIs externas.
